@@ -1,0 +1,156 @@
+export const mockExam = {
+  title: 'Full Stack Developer Assessment',
+  totalDuration: 45 * 60,
+  questions: [
+    {
+      id: 1,
+      type: 'mcq',
+      marks: 2,
+      question: 'What does HTTP stand for?',
+      instruction: 'Choose the most appropriate answer based on REST API conventions.',
+      options: [
+        { id: 'A', text: 'HyperText Transfer Protocol' },
+        { id: 'B', text: 'High Transfer Text Protocol' },
+        { id: 'C', text: 'HyperText Transmission Protocol' },
+        { id: 'D', text: 'High Text Transfer Protocol' },
+      ],
+    },
+    {
+      id: 2,
+      type: 'mcq',
+      marks: 2,
+      question: 'Which HTTP method is idempotent but not safe?',
+      instruction: 'Choose the most appropriate answer based on REST API conventions.',
+      options: [
+        { id: 'A', text: 'GET' },
+        { id: 'B', text: 'POST' },
+        { id: 'C', text: 'PUT' },
+        { id: 'D', text: 'DELETE' },
+      ],
+    },
+    {
+      id: 3,
+      type: 'mcq',
+      marks: 2,
+      question: 'What is the default port for HTTPS?',
+      instruction: 'Choose the most appropriate answer.',
+      options: [
+        { id: 'A', text: '80' },
+        { id: 'B', text: '8080' },
+        { id: 'C', text: '443' },
+        { id: 'D', text: '8443' },
+      ],
+    },
+    {
+      id: 4,
+      type: 'mcq',
+      marks: 2,
+      question: 'Which of the following is a NoSQL database?',
+      instruction: 'Choose the most appropriate answer.',
+      options: [
+        { id: 'A', text: 'MySQL' },
+        { id: 'B', text: 'PostgreSQL' },
+        { id: 'C', text: 'MongoDB' },
+        { id: 'D', text: 'SQLite' },
+      ],
+    },
+    {
+      id: 5,
+      type: 'mcq',
+      marks: 2,
+      question: 'What does REST stand for?',
+      instruction: 'Choose the most appropriate answer.',
+      options: [
+        { id: 'A', text: 'Representational State Transfer' },
+        { id: 'B', text: 'Remote Execution State Transfer' },
+        { id: 'C', text: 'Request State Transfer' },
+        { id: 'D', text: 'Resource Entity State Transfer' },
+      ],
+    },
+    {
+      id: 6,
+      type: 'mcq',
+      marks: 2,
+      question: 'Which CSS property controls the size of text?',
+      instruction: 'Choose the most appropriate answer.',
+      options: [
+        { id: 'A', text: 'font-size' },
+        { id: 'B', text: 'text-size' },
+        { id: 'C', text: 'font-weight' },
+        { id: 'D', text: 'text-style' },
+      ],
+    },
+    {
+      id: 7,
+      type: 'coding',
+      marks: 10,
+      title: 'Two Sum',
+      description:
+        'Given an array of integers {nums} and an integer {target}, return indices of the two numbers such that they add up to target.',
+      inlineCodes: ['nums', 'target'],
+      example:
+        'Input: nums = [2,7,11,15], target = 9 Output: [0,1]\nExplanation: nums[0] + nums[1] = 2 + 7 = 9',
+      constraints: [
+        '2 ≤ nums.length ≤ 10⁴',
+        '-10⁹ ≤ nums[i] ≤ 10⁹',
+        'Only one valid answer exists',
+      ],
+      starterCode: `/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    \n};`,
+      testCases: [
+        { input: '[2,7,11,15], 9', expected: '[0,1]' },
+        { input: '[3,2,4], 6', expected: '[1,2]' },
+        { input: '[3,3], 6', expected: '[0,1]' },
+      ],
+    },
+    {
+      id: 8,
+      type: 'mcq',
+      marks: 2,
+      question: 'What is the time complexity of binary search?',
+      instruction: 'Choose the most appropriate answer.',
+      options: [
+        { id: 'A', text: 'O(n)' },
+        { id: 'B', text: 'O(n²)' },
+        { id: 'C', text: 'O(log n)' },
+        { id: 'D', text: 'O(1)' },
+      ],
+    },
+    {
+      id: 9,
+      type: 'coding',
+      marks: 10,
+      title: 'Reverse a String',
+      description:
+        'Write a function that reverses a string. The input string is given as an array of characters {s}.',
+      inlineCodes: ['s'],
+      example:
+        'Input: s = ["h","e","l","l","o"]\nOutput: ["o","l","l","e","h"]',
+      constraints: [
+        '1 ≤ s.length ≤ 10⁵',
+        's[i] is a printable ASCII character',
+        'Do not allocate extra space for another array',
+      ],
+      starterCode: `/**\n * @param {character[]} s\n * @return {void} Do not return anything, modify s in-place instead.\n */\nvar reverseString = function(s) {\n    \n};`,
+      testCases: [
+        { input: '["h","e","l","l","o"]', expected: '["o","l","l","e","h"]' },
+        {
+          input: '["H","a","n","n","a","h"]',
+          expected: '["h","a","n","n","a","H"]',
+        },
+      ],
+    },
+    {
+      id: 10,
+      type: 'mcq',
+      marks: 2,
+      question: 'Which React hook is used for managing side effects?',
+      instruction: 'Choose the most appropriate answer.',
+      options: [
+        { id: 'A', text: 'useState' },
+        { id: 'B', text: 'useEffect' },
+        { id: 'C', text: 'useContext' },
+        { id: 'D', text: 'useMemo' },
+      ],
+    },
+  ],
+};
