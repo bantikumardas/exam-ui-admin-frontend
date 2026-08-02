@@ -8,12 +8,21 @@ export default function Register() {
   const navigate = useNavigate();
   const { saveSession } = useAuth();
 
-  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "",
+    key: "",
+  });
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
   const [confirmShown, setConfirmShown] = useState(false);
+
+  const requiresKey = form.role === "CAADMIN" || form.role === "ADMIN";
 
   function validate() {
     const errs = {};
@@ -22,6 +31,12 @@ export default function Register() {
 
     if (!form.email.trim()) errs.email = "Email is required.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = "Enter a valid email.";
+
+    if (!form.role) errs.role = "Please select a role.";
+
+    if ((form.role === "CAADMIN" || form.role === "ADMIN") && !form.key.trim()) {
+      errs.key = "Confidential key is required for this role.";
+    }
 
     if (!form.password) errs.password = "Password is required.";
     else if (form.password.length < 6) errs.password = "Password must be at least 6 characters.";
@@ -34,8 +49,13 @@ export default function Register() {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === "role" && value !== "CAADMIN" && value !== "ADMIN" ? { key: "" } : {}),
+    }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+    if (name === "role" && errors.key) setErrors((prev) => ({ ...prev, key: "" }));
     if (apiError) setApiError("");
   }
 
@@ -50,9 +70,15 @@ export default function Register() {
     setLoading(true);
     setApiError("");
     try {
-      const res = await authService.register(form.name.trim(), form.email, form.password);
+      const res = await authService.register(
+        form.name.trim(),
+        form.email,
+        form.password,
+        form.role,
+        requiresKey ? form.key.trim() : undefined
+      );
       saveSession(res.data);
-      navigate(res.data.role === "ADMIN" ? "/admin/dashboard" : "/dashboard");
+      navigate(res.data.role === "ADMIN" || res.data.role === "CAADMIN" ? "/admin/dashboard" : "/dashboard");
     } catch (err) {
       setApiError(err.message || "Registration failed. Please try again.");
     } finally {
@@ -110,6 +136,49 @@ export default function Register() {
             />
             {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
           </div>
+
+          <div className="mb-6">
+            <label htmlFor="role" className="mb-2 block text-sm font-medium text-gray-900">
+              Role
+            </label>
+            <select
+              id="role"
+              name="role"
+              value={form.role}
+              onChange={handleChange}
+              className={`w-full rounded-lg border px-4 py-3 text-sm text-gray-900 focus:outline-none focus:border-gray-500 ${
+                errors.role ? "border-red-400" : "border-blue-gray-200"
+              }`}
+            >
+              <option value="" disabled>
+                Select Role
+              </option>
+              <option value="CAADMIN">CA Admin</option>
+              <option value="ADMIN">Admin</option>
+              <option value="CANDIDATE">Candidate</option>
+            </select>
+            {errors.role && <p className="mt-1 text-xs text-red-500">{errors.role}</p>}
+          </div>
+
+          {requiresKey && (
+            <div className="mb-6">
+              <label htmlFor="key" className="mb-2 block text-sm font-medium text-gray-900">
+                Confidential Key
+              </label>
+              <input
+                id="key"
+                type="text"
+                name="key"
+                value={form.key}
+                onChange={handleChange}
+                placeholder="Enter confidential key"
+                className={`w-full rounded-lg border px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-500 ${
+                  errors.key ? "border-red-400" : "border-blue-gray-200"
+                }`}
+              />
+              {errors.key && <p className="mt-1 text-xs text-red-500">{errors.key}</p>}
+            </div>
+          )}
 
           <div className="mb-6">
             <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-900">

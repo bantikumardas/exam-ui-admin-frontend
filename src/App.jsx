@@ -15,14 +15,14 @@ function PrivateRoute({ children }) {
 function AdminRoute({ children }) {
   const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (user?.role !== "ADMIN") return <Navigate to="/dashboard" replace />;
+  if (user?.role !== "ADMIN" && user?.role !== "CAADMIN") return <Navigate to="/dashboard" replace />;
   return children;
 }
 
 function PublicRoute({ children }) {
   const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated) return children;
-  return <Navigate to={user?.role === "ADMIN" ? "/admin/dashboard" : "/dashboard"} replace />;
+  return <Navigate to={(user?.role === "ADMIN" || user?.role==="CAADMIN")? "/admin/dashboard" : "/dashboard"} replace />;
 }
 
 function Dashboard() {

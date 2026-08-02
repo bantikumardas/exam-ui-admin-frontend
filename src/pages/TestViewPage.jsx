@@ -42,12 +42,19 @@ export default function TestViewPage() {
   if (!test) return null;
 
   const allQuestions = [
-    ...test.mcqQuestions.map((q) => ({ ...q, type: "mcq" })),
-    ...test.codingQuestionResponses.map((q) => ({ ...q, type: "coding" })),
+    ...(test.mcqQuestions || []).map((q) => ({ ...q, type: "mcq" })),
+    ...(test.codingQuestionResponses || []).map((q) => ({ ...q, type: "coding" })),
   ];
 
   const total = allQuestions.length;
   const current = allQuestions[currentIndex];
+
+  if (!current)
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center text-zinc-400">
+        No questions found for this test.
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-black p-6 text-white">
