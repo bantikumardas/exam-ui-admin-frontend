@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://banti-exam.duckdns.org/api/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
