@@ -120,7 +120,7 @@ export default function AdminDashboard() {
   ];
 
   const tabClass = (tab) =>
-    `px-8 py-4 rounded-2xl border text-lg font-semibold transition ${
+    `px-5 py-2.5 rounded-xl border text-sm font-semibold transition ${
       activeTab === tab
         ? "bg-zinc-800 border-zinc-500"
         : "border-zinc-700 hover:bg-zinc-800"
@@ -143,11 +143,11 @@ export default function AdminDashboard() {
 
   return (
     <>
-    <div className="min-h-screen bg-black p-6 text-white">
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-zinc-700 bg-zinc-900">
+    <div className="h-screen overflow-hidden bg-black text-white">
+      <div className="flex h-full w-full flex-col overflow-hidden rounded-1xl border border-zinc-700 bg-zinc-900">
 
         {/* Header */}
-        <div className="flex items-center gap-4 border-b border-zinc-700 p-6">
+        <div className="flex flex-none items-center gap-3 border-b border-zinc-700 px-5 py-2.5">
           <button
             onClick={() => setActiveTab("tests")}
             className={tabClass("tests")}
@@ -173,10 +173,10 @@ export default function AdminDashboard() {
         </div>
 
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-700 p-6">
-          <div className="flex gap-4">
-            <button className="rounded-2xl border border-zinc-700 p-4">
-              <SlidersHorizontal />
+        <div className="flex flex-none flex-wrap items-center justify-between gap-4 border-b border-zinc-700 px-5 py-2.5">
+          <div className="flex gap-3">
+            <button className="rounded-xl border border-zinc-700 p-2.5">
+              <SlidersHorizontal size={18} />
             </button>
 
             <div className="flex">
@@ -186,12 +186,12 @@ export default function AdminDashboard() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                className="w-[400px] rounded-l-2xl border border-zinc-700 bg-transparent px-5 py-4 outline-none"
+                className="w-[400px] rounded-l-xl border border-zinc-700 bg-transparent px-4 py-2.5 outline-none"
               />
 
               <button
                 onClick={handleSearch}
-                className="rounded-r-2xl border border-l-0 border-zinc-700 px-8"
+                className="rounded-r-xl border border-l-0 border-zinc-700 px-6"
               >
                 Search
               </button>
@@ -200,7 +200,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => activeTab === "tests" && setShowCreateModal(true)}
-            className="rounded-2xl border border-zinc-700 px-6 py-4 font-semibold"
+            className="rounded-xl border border-zinc-700 px-5 py-2.5 font-semibold"
           >
             +{" "}
             {activeTab === "tests"
@@ -216,27 +216,27 @@ export default function AdminDashboard() {
           <TableWrapper>
             <thead>
               <tr>
-                <TH>Sl no.</TH>
-                <TH>Test Name</TH>
-                <TH>Total Questions</TH>
-                <TH>Coding Questions</TH>
-                <TH> Total Time</TH>
-                <TH>Status</TH>
-                <TH>Action</TH>
+                <TH className="w-[6%]">Sl no.</TH>
+                <TH className="w-[26%]">Test Name</TH>
+                <TH className="w-[14%]">Total Questions</TH>
+                <TH className="w-[14%]">Coding Questions</TH>
+                <TH className="w-[12%]"> Total Time</TH>
+                <TH className="w-[14%]">Status</TH>
+                <TH className="w-[14%]">Action</TH>
               </tr>
             </thead>
 
             <tbody>
               {testsLoading && (
                 <tr>
-                  <td colSpan={6} className="px-8 py-10 text-center text-zinc-400">
+                  <td colSpan={7} className="px-8 py-10 text-center text-zinc-400">
                     Loading...
                   </td>
                 </tr>
               )}
               {testsError && (
                 <tr>
-                  <td colSpan={6} className="px-8 py-10 text-center text-red-400">
+                  <td colSpan={7} className="px-8 py-10 text-center text-red-400">
                     {testsError}
                   </td>
                 </tr>
@@ -244,13 +244,17 @@ export default function AdminDashboard() {
               {!testsLoading && !testsError && tests.map((item, index) => (
                 <tr key={item.testId} className="border-t border-zinc-700">
                   <TD>{testsPagination.pageNo * 10 + index + 1}</TD>
-                  <TD>{item.testName}</TD>
+                  <TD>
+                    <span className="block truncate" title={item.testName}>
+                      {item.testName}
+                    </span>
+                  </TD>
                   <TD>{item.totalQuestions}</TD>
                   <TD>{item.totalCodingQuestions}</TD>
                   <TD>{item.totalTimeMinute}</TD>
                   <TD>
                     <span
-                      className={`rounded-full px-4 py-2 text-sm font-semibold ${statusClass[item.status]}`}
+                      className={`rounded-full px-3 py-1 text-sm font-semibold ${statusClass[item.status]}`}
                     >
                       {item.status}
                     </span>
@@ -270,11 +274,11 @@ export default function AdminDashboard() {
           <TableWrapper>
             <thead>
               <tr>
-                <TH>Sl no.</TH>
-                <TH>Question</TH>
-                <TH>Correct Option</TH>
-                <TH>Test</TH>
-                <TH>Marks</TH>
+                <TH className="w-[6%]">Sl no.</TH>
+                <TH className="w-[48%]">Question</TH>
+                <TH className="w-[14%]">Correct Option</TH>
+                <TH className="w-[20%]">Test</TH>
+                <TH className="w-[12%]">Marks</TH>
               </tr>
             </thead>
 
@@ -282,15 +286,23 @@ export default function AdminDashboard() {
               {mcqs.map((item) => (
                 <tr key={item.id} className="border-t border-zinc-700">
                   <TD>{item.id}</TD>
-                  <TD>{item.question}</TD>
+                  <TD>
+                    <span className="block truncate" title={item.question}>
+                      {item.question}
+                    </span>
+                  </TD>
 
                   <TD>
-                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-100 font-bold text-violet-700">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-100 font-bold text-violet-700">
                       {item.option}
                     </span>
                   </TD>
 
-                  <TD>{item.test}</TD>
+                  <TD>
+                    <span className="block truncate" title={item.test}>
+                      {item.test}
+                    </span>
+                  </TD>
                   <TD>{item.marks}</TD>
                 </tr>
               ))}
@@ -303,11 +315,11 @@ export default function AdminDashboard() {
           <TableWrapper>
             <thead>
               <tr>
-                <TH>Sl no.</TH>
-                <TH>Question</TH>
-                <TH>Difficulty</TH>
-                <TH>Test</TH>
-                <TH>Marks</TH>
+                <TH className="w-[6%]">Sl no.</TH>
+                <TH className="w-[42%]">Question</TH>
+                <TH className="w-[16%]">Difficulty</TH>
+                <TH className="w-[24%]">Test</TH>
+                <TH className="w-[12%]">Marks</TH>
               </tr>
             </thead>
 
@@ -315,17 +327,25 @@ export default function AdminDashboard() {
               {coding.map((item) => (
                 <tr key={item.id} className="border-t border-zinc-700">
                   <TD>{item.id}</TD>
-                  <TD>{item.question}</TD>
+                  <TD>
+                    <span className="block truncate" title={item.question}>
+                      {item.question}
+                    </span>
+                  </TD>
 
                   <TD>
                     <span
-                      className={`rounded-full px-4 py-2 text-sm font-semibold ${difficultyClass[item.difficulty]}`}
+                      className={`rounded-full px-3 py-1 text-sm font-semibold ${difficultyClass[item.difficulty]}`}
                     >
                       {item.difficulty}
                     </span>
                   </TD>
 
-                  <TD>{item.test}</TD>
+                  <TD>
+                    <span className="block truncate" title={item.test}>
+                      {item.test}
+                    </span>
+                  </TD>
                   <TD>{item.marks}</TD>
                 </tr>
               ))}
@@ -334,7 +354,7 @@ export default function AdminDashboard() {
         )}
 
         {/* Pagination */}
-        <div className="flex justify-center gap-3 p-6">
+        <div className="flex flex-none justify-center gap-2 border-t border-zinc-700 px-4 py-2">
           <PageBtn
             onClick={() => goToPage(testsPagination.pageNo - 1)}
             disabled={!testsPagination.hasPrevious}

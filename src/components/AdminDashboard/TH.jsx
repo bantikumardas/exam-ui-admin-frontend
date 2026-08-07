@@ -1,6 +1,8 @@
-export default function TH({ children }) {
+export default function TH({ children, className = "" }) {
   return (
-    <th className="bg-zinc-950 px-6 py-3 text-left text-zinc-400">
+    <th
+      className={`sticky top-0 z-10 whitespace-nowrap bg-zinc-950 px-4 py-2 text-left text-sm text-zinc-400 ${className}`}
+    >
       {children}
     </th>
   );

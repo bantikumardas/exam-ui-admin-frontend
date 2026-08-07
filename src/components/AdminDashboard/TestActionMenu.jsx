@@ -47,7 +47,7 @@ export default function TestActionMenu({ test, onAction }) {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="rounded-2xl border border-zinc-700 p-4 hover:bg-zinc-800 transition"
+        className="rounded-xl border border-zinc-700 p-2 hover:bg-zinc-800 transition"
       >
         <EllipsisVertical size={18} />
       </button>

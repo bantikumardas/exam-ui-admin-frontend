@@ -57,12 +57,11 @@ export default function TestViewPage() {
     );
 
   return (
-    <div className="min-h-screen bg-black p-6 text-white">
-      <div className="mx-auto max-w-5xl">
-        <div className="rounded-3xl border border-zinc-700 bg-zinc-900 overflow-hidden">
+    <div className="h-screen overflow-hidden bg-black text-white">
+      <div className="flex h-full w-full flex-col overflow-hidden rounded-1xl border border-zinc-700 bg-zinc-900">
 
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-zinc-700 px-8 py-5">
+        {/* Header */}
+        <div className="flex flex-none items-center justify-between border-b border-zinc-700 px-8 py-5">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate("/admin/dashboard")}
@@ -93,9 +92,9 @@ export default function TestViewPage() {
             </span>
           </div>
 
-          <div className="flex">
+          <div className="flex flex-1 min-h-0">
             {/* Sidebar */}
-            <div className="border-r border-zinc-700 flex flex-col w-16 shrink-0">
+            <div className="border-r border-zinc-700 flex flex-col w-16 shrink-0 overflow-y-auto">
               {allQuestions.map((q, i) => (
                 <button
                   key={i}
@@ -112,7 +111,7 @@ export default function TestViewPage() {
             </div>
 
             {/* Question area */}
-            <div className="flex-1 p-8 min-w-0">
+            <div className="flex-1 p-8 min-w-0 overflow-y-auto">
               {/* Counter */}
               <div className="mb-6">
                 <span className="rounded-2xl border border-zinc-600 px-5 py-2 text-sm font-semibold text-zinc-300">
@@ -160,7 +159,6 @@ export default function TestViewPage() {
             </div>
           </div>
         </div>
-      </div>
 
       {editingMcq && (
         <AddMcqModal
