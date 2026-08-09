@@ -3,9 +3,17 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
+import CompanyDashboard from "./pages/CompanyDashboard";
 import CreateCodingQuestion from "./pages/CreateCodingQuestion";
 import TestViewPage from "./pages/TestViewPage";
 import EditTest from "./pages/EditTest";
+import ProfilePage from "./pages/ProfilePage";
+
+function postLoginPath(role) {
+  if (role === "ADMIN") return "/admin/companies";
+  if (role === "CAADMIN") return "/admin/dashboard";
+  return "/dashboard";
+}
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -19,10 +27,17 @@ function AdminRoute({ children }) {
   return children;
 }
 
+function SuperAdminRoute({ children }) {
+  const { isAuthenticated, user } = useAuth();
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (user?.role !== "ADMIN") return <Navigate to="/admin/dashboard" replace />;
+  return children;
+}
+
 function PublicRoute({ children }) {
   const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated) return children;
-  return <Navigate to={(user?.role === "ADMIN" || user?.role==="CAADMIN")? "/admin/dashboard" : "/dashboard"} replace />;
+  return <Navigate to={postLoginPath(user?.role)} replace />;
 }
 
 function Dashboard() {
@@ -75,7 +90,31 @@ export default function App() {
             }
           />
           <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/companies"
+            element={
+              <SuperAdminRoute>
+                <CompanyDashboard />
+              </SuperAdminRoute>
+            }
+          />
+          <Route
             path="/admin/dashboard"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/company/:companyId/dashboard"
             element={
               <AdminRoute>
                 <AdminDashboard />

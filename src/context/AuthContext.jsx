@@ -32,6 +32,7 @@ export function AuthProvider({ children }) {
       email: data.email,
       name: data.name,
       role: data.role,
+      logoUrl: data.logoUrl,
     };
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(userInfo));

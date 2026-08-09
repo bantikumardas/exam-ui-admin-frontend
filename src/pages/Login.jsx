@@ -42,8 +42,15 @@ export default function Login() {
     try {
       const res = await authService.login(form.email, form.password);
       saveSession(res.data);
-      
-      navigate("/admin/dashboard");
+
+      const role = res.data.role;
+      navigate(
+        role === "ADMIN"
+          ? "/admin/companies"
+          : role === "CAADMIN"
+          ? "/admin/dashboard"
+          : "/dashboard"
+      );
     } catch (err) {
       setApiError(err.message || "Login failed. Please try again.");
     } finally {

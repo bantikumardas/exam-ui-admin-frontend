@@ -2,7 +2,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import { testService } from "../../services/testService";
 
-export default function CreateTestModal({ onClose, onCreated }) {
+export default function CreateTestModal({ onClose, onCreated, companyId }) {
   const [testName, setTestName] = useState("");
   const [totalTimeMinute, setTotalTimeMinute] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ export default function CreateTestModal({ onClose, onCreated }) {
     setLoading(true);
     setError(null);
     try {
-      await testService.createTest(testName.trim(), Number(totalTimeMinute));
+      await testService.createTest(testName.trim(), Number(totalTimeMinute), companyId);
       onCreated();
       onClose();
     } catch (err) {
