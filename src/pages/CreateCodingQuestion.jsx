@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Plus, Trash2, X } from "lucide-react";
 import { codingService } from "../services/codingService";
+import FormattedTextarea from "../components/AdminDashboard/FormattedTextarea";
 
 const EMPTY_TEST_CASE = {
   input: "",
@@ -10,6 +11,17 @@ const EMPTY_TEST_CASE = {
   isHidden: false,
   isExample: true,
 };
+
+function toTestCaseForm(tc) {
+  return {
+    testCaseId: tc.testCaseId ?? tc.id ?? undefined,
+    input: tc.input ?? "",
+    expectedOutput: tc.expectedOutput ?? "",
+    explanation: tc.explanation ?? "",
+    isHidden: tc.isHidden ?? false,
+    isExample: tc.isExample ?? !tc.isHidden,
+  };
+}
 
 export default function CreateCodingQuestion() {
   const { testId } = useParams();
@@ -31,11 +43,12 @@ export default function CreateCodingQuestion() {
   const [marks, setMarks] = useState(
     editingQuestion?.marks != null ? String(editingQuestion.marks) : ""
   );
-  const [testCases, setTestCases] = useState(
-    editingQuestion?.testCases?.length
-      ? editingQuestion.testCases
-      : [{ ...EMPTY_TEST_CASE }]
-  );
+  const [testCases, setTestCases] = useState(() => {
+    const source = editingQuestion?.testCaseResponse?.length
+      ? editingQuestion.testCaseResponse
+      : editingQuestion?.testCases;
+    return source?.length ? source.map(toTestCaseForm) : [{ ...EMPTY_TEST_CASE }];
+  });
 
   const [loading, setLoading] = useState(false);
   const [errorPopup, setErrorPopup] = useState(null);
@@ -75,14 +88,14 @@ export default function CreateCodingQuestion() {
         constraints: constraints.filter((c) => c.trim()),
         difficulty,
         marks: Number(marks),
-        testCases,
+        testCases: testCases.map(({ testCaseId, ...rest }) => rest),
       };
       if (isEditing) {
         payload.codingQuestionId =
           editingQuestion.codingQuestionId ?? editingQuestion.id;
       }
       await codingService.addCodingQuestion(payload);
-      navigate(isEditing ? `/admin/${testId}/view` : "/admin/dashboard");
+      navigate(`/admin/${testId}/view`);
     } catch (err) {
       setErrorPopup(err.message);
     } finally {
@@ -111,9 +124,7 @@ export default function CreateCodingQuestion() {
           </div>
           <button
             type="button"
-            onClick={() =>
-              navigate(isEditing ? `/admin/${testId}/view` : "/admin/dashboard")
-            }
+            onClick={() => navigate(`/admin/${testId}/view`)}
             className="rounded-2xl border border-zinc-700 px-5 py-3 text-sm hover:bg-zinc-800 transition"
           >
             Cancel
@@ -138,13 +149,12 @@ export default function CreateCodingQuestion() {
 
           {/* Description */}
           <Section label="Description">
-            <textarea
+            <FormattedTextarea
               placeholder="Brief description of the problem"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
               rows={3}
-              className={`${inputClass} resize-none`}
             />
           </Section>
 
@@ -153,18 +163,19 @@ export default function CreateCodingQuestion() {
             <div className="flex flex-col gap-2">
               {paragraphs.map((p, i) => (
                 <div key={i} className="flex items-start gap-2">
-                  <textarea
-                    placeholder={`Paragraph ${i + 1}`}
-                    value={p}
-                    onChange={(e) => updateList(setParagraphs, i, e.target.value)}
-                    rows={2}
-                    className={`${inputClass} resize-none`}
-                  />
+                  <div className="flex-1">
+                    <FormattedTextarea
+                      placeholder={`Paragraph ${i + 1}`}
+                      value={p}
+                      onChange={(e) => updateList(setParagraphs, i, e.target.value)}
+                      rows={2}
+                    />
+                  </div>
                   {paragraphs.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeFromList(setParagraphs, i)}
-                      className="mt-3 text-red-400 hover:text-red-300 transition"
+                      className="mt-8 text-red-400 hover:text-red-300 transition"
                     >
                       <Trash2 size={16} />
                     </button>

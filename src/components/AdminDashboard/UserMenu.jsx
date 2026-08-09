@@ -30,7 +30,7 @@ export default function UserMenu() {
         <div className="absolute right-0 top-16 z-50 w-44 overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900 shadow-lg">
           <button
             className="flex w-full items-center gap-3 px-5 py-4 text-sm hover:bg-zinc-800 transition"
-            onClick={() => setOpen(false)}
+            onClick={() => { setOpen(false); navigate("/profile"); }}
           >
             <User size={16} />
             Profile

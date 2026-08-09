@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { SlidersHorizontal, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 import { testService } from "../services/testService";
+import { useAuth } from "../context/AuthContext";
 
 import UserMenu from "../components/AdminDashboard/UserMenu";
 import TableWrapper from "../components/AdminDashboard/TableWrapper";
@@ -15,6 +16,10 @@ import SendInviteModal from "../components/AdminDashboard/SendInviteModal";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { companyId } = useParams();
+  const location = useLocation();
+  const company = location.state?.company;
   const [activeTab, setActiveTab] = useState("tests");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [mcqModalTest, setMcqModalTest] = useState(null);
@@ -37,7 +42,7 @@ export default function AdminDashboard() {
     setTestsLoading(true);
     setTestsError(null);
     testService
-      .getAllTests(testsPagination.pageNo, 10, activeQuery)
+      .getAllTests(testsPagination.pageNo, 10, activeQuery, companyId)
       .then((res) => {
         const { content, pageNo, totalPages, hasNext, hasPrevious } = res.data;
         setTests(content);
@@ -45,7 +50,7 @@ export default function AdminDashboard() {
       })
       .catch((err) => setTestsError(err.message))
       .finally(() => setTestsLoading(false));
-  }, [activeTab, testsPagination.pageNo, testsRefreshKey, activeQuery]);
+  }, [activeTab, testsPagination.pageNo, testsRefreshKey, activeQuery, companyId]);
 
   const goToPage = (page) =>
     setTestsPagination((prev) => ({ ...prev, pageNo: page }));
@@ -148,6 +153,30 @@ export default function AdminDashboard() {
 
         {/* Header */}
         <div className="flex flex-none items-center gap-3 border-b border-zinc-700 px-5 py-2.5">
+          {user?.logoUrl && (
+            <img
+              src={user.logoUrl}
+              alt="Company logo"
+              className="h-9 w-9 shrink-0 rounded-lg bg-white/5 object-contain"
+              onError={(e) => { e.currentTarget.style.display = "none"; }}
+            />
+          )}
+          {companyId && (
+            <>
+              <button
+                onClick={() => navigate("/admin/companies")}
+                className="rounded-xl border border-zinc-700 p-2.5 hover:bg-zinc-800 transition"
+                title="Back to Companies"
+              >
+                <ArrowLeft size={18} />
+              </button>
+              {company?.companyName && (
+                <span className="mr-1 text-sm text-zinc-400">
+                  Managing: <span className="font-semibold text-white">{company.companyName}</span>
+                </span>
+              )}
+            </>
+          )}
           <button
             onClick={() => setActiveTab("tests")}
             className={tabClass("tests")}
@@ -386,6 +415,7 @@ export default function AdminDashboard() {
       <CreateTestModal
         onClose={() => setShowCreateModal(false)}
         onCreated={() => setTestsRefreshKey((k) => k + 1)}
+        companyId={companyId}
       />
     )}
 
