@@ -54,12 +54,6 @@ export default function TestActionMenu({ test, onAction }) {
 
       {open && (
         <div className="absolute right-0 z-50 mt-2 w-52 overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-900 shadow-xl">
-          <MenuItem icon={<ListPlus size={15} />} onClick={() => handle("add_mcq")}>
-            Add MCQ Question
-          </MenuItem>
-          <MenuItem icon={<Code2 size={15} />} onClick={() => handle("add_coding")}>
-            Add Coding Question
-          </MenuItem>
           <MenuItem icon={<Eye size={15} />} onClick={() => handle("view")}>
             View
           </MenuItem>
